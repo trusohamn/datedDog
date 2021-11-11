@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     fetch(server)
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => setServices(data));
   }, []);
 
   const handleAddNewService = (e: React.FormEvent) => {
@@ -43,7 +43,7 @@ function App() {
       </section>
       <section>
         Visualisation
-        {services.forEach((service) => (
+        {services.map((service) => (
           <Graph service={service} />
         ))}
       </section>
