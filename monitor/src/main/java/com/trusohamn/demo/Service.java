@@ -8,23 +8,17 @@ import javax.persistence.Id;
 @Entity
 class Service {
 
-  private @Id @GeneratedValue Long id;
+  @Id
+  @GeneratedValue
+  private Long id;
+
   private String name;
   private String url;
   private ArrayList<Boolean> status = new ArrayList<Boolean>();
 
-  public ArrayList<Boolean> getStatus() {
-	return status;
-}
-
-public void setStatus(ArrayList<Boolean> status) {
-	this.status = status;
-}
-
-Service() {}
+  Service() {}
 
   Service(String name, String url) {
-
     this.name = name;
     this.url = url;
   }
@@ -53,4 +47,11 @@ Service() {}
     this.url = url;
   }
 
+  public ArrayList<Boolean> getStatus() {
+    return status;
+  }
+
+  public void setStatus(ArrayList<Boolean> status) {
+    this.status = status;
+  }
 }
