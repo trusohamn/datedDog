@@ -1,7 +1,6 @@
 package com.trusohamn.demo;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +62,7 @@ class MonitorController {
     return repository.findById(id).orElseThrow(() -> new RuntimeException());
   }
 
-  @DeleteMapping("/Services/{id}")
+  @DeleteMapping("/services/{id}")
   void deleteService(@PathVariable Long id) {
     repository.deleteById(id);
   }
