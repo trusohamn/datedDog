@@ -1,6 +1,8 @@
 package com.trusohamn.demo;
 
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,6 +13,8 @@ class Service {
   @Id
   @GeneratedValue
   private Long id;
+  
+  private Date createdDate = new Date();
 
   private String name;
   private String url;
@@ -54,4 +58,12 @@ class Service {
   public void setStatus(ArrayList<Boolean> status) {
     this.status = status;
   }
+
+public Date getCreatedDate() {
+	return createdDate;
+}
+
+public void setCreatedDate(Date createdDate) {
+	this.createdDate = createdDate;
+}
 }

@@ -21,6 +21,7 @@ function Graph({
     >
       <h2>{service.name}</h2>
       <h3>{service.url}</h3>
+      <p>{new Date(service.createdDate).toLocaleString('en-US')}</p>
       <button onClick={() => onDelete(service.id)}>Delete</button>
       <br />
       <div style={{ display: 'flex' }}>
