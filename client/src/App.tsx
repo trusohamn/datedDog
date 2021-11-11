@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Graph from './components/Graph';
+import { server } from './constants';
 import { Service } from './types';
-
-const server = 'http://localhost:8080/services';
 
 function App() {
   const [services, setServices] = useState<Service[]>([]);
@@ -13,7 +12,7 @@ function App() {
   useEffect(() => {
     let fetchTimeout: NodeJS.Timeout;
     const fetchData = () => {
-      fetch(server)
+      fetch(`${server}/services`)
         .then((response) => response.json())
         .then((data) => {
           setServices(data);
@@ -26,13 +25,20 @@ function App() {
 
   const handleAddNewService = (e: React.FormEvent) => {
     e.preventDefault();
-    fetch(server, {
+    fetch(`${server}/services`, {
       method: 'POST',
       mode: 'cors',
       body: JSON.stringify({ name: newName, url: newUrl }),
       headers: {
         'Content-Type': 'application/json',
       },
+    });
+  };
+
+  const handleDeleteService = (id: number) => {
+    fetch(`${server}/services/${id}`, {
+      method: 'DELETE',
+      mode: 'cors',
     });
   };
 
@@ -53,7 +59,7 @@ function App() {
       </section>
       <section>
         {services.map((service) => (
-          <Graph service={service} />
+          <Graph service={service} onDelete={handleDeleteService} />
         ))}
       </section>
     </div>

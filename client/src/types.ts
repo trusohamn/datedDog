@@ -1,1 +1,6 @@
-export type Service = { name: string; url: string; status: boolean[] };
+export type Service = {
+  id: number;
+  name: string;
+  url: string;
+  status: boolean[];
+};
