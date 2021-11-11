@@ -1,9 +1,9 @@
 package com.trusohamn.demo;
 
-
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -28,13 +30,25 @@ class MonitorController {
     ScheduledTask.class
   );
 
+  @Autowired
+  private RestTemplate restTemplate;
+
   @Scheduled(fixedRate = 5000)
   public void getServicesStatus() {
     repository
       .findAll()
       .forEach(
         service -> {
-          service.getStatus().add(Math.random() < 0.5);
+          String response = "FAIL";
+          String URI = service.getUrl();
+          try {
+            response = restTemplate.getForObject(URI, String.class);
+          } catch (RestClientException e) {
+            e.printStackTrace();
+          }
+          Boolean status = response.equals("OK");
+
+          service.getStatus().add(status);
           if (service.getStatus().size() > 10) service.getStatus().remove(0);
           repository.save(service);
         }
@@ -65,5 +79,22 @@ class MonitorController {
   @DeleteMapping("/services/{id}")
   void deleteService(@PathVariable Long id) {
     repository.deleteById(id);
+  }
+
+  // Mock endpoints
+
+  @GetMapping("/mock/healthy")
+  String healthyService() {
+    return "OK";
+  }
+
+  @GetMapping("/mock/unhealthy")
+  String unhealthyService() {
+    return Math.random() < 0.1 ? "OK" : "FAIL";
+  }
+
+  @GetMapping("/mock/unstable")
+  String unstableService() {
+    return Math.random() < 0.5 ? "OK" : "FAIL";
   }
 }
