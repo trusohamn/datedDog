@@ -38,20 +38,20 @@ function App() {
 
   return (
     <div className='App'>
-      Monitor
+      <h1> Monitor</h1>
       <section>
-        Add new <br />
-        name
+        <h2>Add new service </h2>
         <form onSubmit={handleAddNewService}>
+          name{' '}
           <input value={newName} onChange={(e) => setNewName(e.target.value)} />
           <br />
-          url
+          url{' '}
           <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} />
+          <br />
           <input type='submit' />
         </form>
       </section>
       <section>
-        Visualisation
         {services.map((service) => (
           <Graph service={service} />
         ))}
