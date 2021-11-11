@@ -1,11 +1,8 @@
 package com.trusohamn.demo;
 
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,14 +18,11 @@ import org.springframework.web.client.RestTemplate;
 class MonitorController {
 
   private final ServiceRepository repository;
+  int limitStatusHold = 10;
 
   MonitorController(ServiceRepository repository) {
     this.repository = repository;
   }
-
-  private static final Logger log = LoggerFactory.getLogger(
-    ScheduledTask.class
-  );
 
   @Autowired
   private RestTemplate restTemplate;
@@ -49,7 +43,7 @@ class MonitorController {
           Boolean status = response.equals("OK");
 
           service.getStatus().add(status);
-          if (service.getStatus().size() > 10) service.getStatus().remove(0);
+          if (service.getStatus().size() > limitStatusHold) service.getStatus().remove(0);
           repository.save(service);
         }
       );

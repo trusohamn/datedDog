@@ -17,7 +17,8 @@ function App() {
         .then((data) => {
           setServices(data);
           fetchTimeout = setTimeout(fetchData, 2000);
-        });
+        })
+        .catch((e) => {});
     };
     fetchData();
     return () => fetchTimeout && clearTimeout(fetchTimeout);
