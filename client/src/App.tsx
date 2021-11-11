@@ -4,15 +4,24 @@ import Graph from './components/Graph';
 import { Service } from './types';
 
 const server = 'http://localhost:8080/services';
+
 function App() {
   const [services, setServices] = useState<Service[]>([]);
   const [newName, setNewName] = useState('');
   const [newUrl, setNewUrl] = useState('');
 
   useEffect(() => {
-    fetch(server)
-      .then((response) => response.json())
-      .then((data) => setServices(data));
+    let fetchTimeout: NodeJS.Timeout;
+    const fetchData = () => {
+      fetch(server)
+        .then((response) => response.json())
+        .then((data) => {
+          setServices(data);
+          fetchTimeout = setTimeout(fetchData, 2000);
+        });
+    };
+    fetchData();
+    return () => fetchTimeout && clearTimeout(fetchTimeout);
   }, []);
 
   const handleAddNewService = (e: React.FormEvent) => {
